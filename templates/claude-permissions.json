@@ -1,11 +1,5 @@
 {
   "permissions": {
-    "ask": [
-      "Bash(git push *)",
-      "Bash(git merge *)",
-      "Bash(gh pr *)",
-      "Read(//**/.env.*)"
-    ],
     "deny": [
       "Bash(git reset --hard *)",
       "Bash(git clean *)",
@@ -18,6 +12,13 @@
       "Edit(//**/.env.*)",
       "Edit(//**/*.pem)",
       "Edit(//**/*.key)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(git merge *)",
+      "Bash(git restore *)",
+      "Bash(gh pr *)",
+      "Read(//**/.env.*)"
     ]
   }
 }
