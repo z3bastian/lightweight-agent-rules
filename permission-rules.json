@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "ask": [
+      "Bash(git push *)",
+      "Bash(git merge *)",
+      "Bash(gh pr *)",
+      "Read(//**/.env.*)"
+    ],
+    "deny": [
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(git checkout .)",
+      "Bash(git checkout -- *)",
+      "Read(//**/.env)",
+      "Read(//**/*.pem)",
+      "Read(//**/*.key)",
+      "Edit(//**/.env)",
+      "Edit(//**/.env.*)",
+      "Edit(//**/*.pem)",
+      "Edit(//**/*.key)"
+    ]
+  }
+}
