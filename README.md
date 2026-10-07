@@ -98,29 +98,45 @@ you explicitly approve replacing them.
 
 | File | Purpose |
 | --- | --- |
-| `~/.codex/AGENTS.md` | The master shared rules. Codex reads its own global instructions file directly. |
-| `~/.claude/CLAUDE.md` | Imports the master with `@~/.codex/AGENTS.md`, then adds a few Claude-only rules. |
+| `~/.codex/AGENTS.md` | The shared rules file. Codex reads its own global instructions file directly. |
+| `~/.claude/CLAUDE.md` | Imports the shared rules with `@~/.codex/AGENTS.md`, then adds a few Claude-only rules. |
 | `~/.claude/settings.json` | Claude's permission rules, merged into your existing settings. |
 | A project's `AGENTS.md` / `CLAUDE.md` | Instructions specific to that project. The installer leaves them alone. |
 
+The two tools are peers: neither controls the other. `.codex` and `.claude`
+are separate hidden folders inside your home folder (`~`):
+
 ```text
-~/.codex/AGENTS.md  (the master)
-   ├── Codex reads it directly
-   └── Claude imports it from ~/.claude/CLAUDE.md
+~/
+├── .codex/
+│   └── AGENTS.md       (shared rules; Codex reads directly)
+└── .claude/
+    ├── CLAUDE.md       (imports @~/.codex/AGENTS.md)
+    └── settings.json  (Claude permissions)
 ```
 
 Claude only: the shared rules go directly into `~/.claude/CLAUDE.md`, followed
 by the Claude-only rules; no `~/.codex` folder is created. Codex only: install
 just `~/.codex/AGENTS.md`, with no Claude files or Claude permission rules.
 
-The combined layout uses Codex's documented global file and Claude's
-import syntax. It needs no symlink and puts no master rules file in your
-projects folder. The master is in a hidden folder: ask your AI to open it in
-VS Code. After editing it, start a new chat and verify it loads.
+The shared file lives in `.codex` because that is Codex's documented global
+location, and Claude's supported import lets both read one editable file.
+It needs no symlink and puts no shared rules file in your projects folder.
+Ask your AI to open the hidden file in VS Code. After editing it, start a
+new chat and verify it loads.
 
 For notes shared by both tools inside a project, keep them in `AGENTS.md`
-and put `@AGENTS.md` in a neighbouring `CLAUDE.md`. This avoids relying on
-version-dependent automatic discovery of `AGENTS.md` by Claude.
+and put `@AGENTS.md` in a neighbouring `CLAUDE.md`. This remains a supported
+option across versions and does not make Claude load the file twice.
+
+Claude Code v2.1.277 and later can also read project `AGENTS.md` files directly
+through its built-in plugin. By default it prefers `CLAUDE.md`: direct
+`AGENTS.md` loading applies when no `CLAUDE.md`, `.claude/CLAUDE.md`, or
+`CLAUDE.local.md` exists in the working directory or its ancestors. Your
+global `~/.claude/CLAUDE.md` does not suppress that fallback. A setting can
+instead load both kinds of project file. This project discovery does not
+automatically read Codex's global `~/.codex/AGENTS.md`, so the combined setup
+keeps its global import. See [Claude's AGENTS.md support and import guidance](https://code.claude.com/docs/en/memory#agentsmd).
 
 ## Backups and undo
 
@@ -183,7 +199,7 @@ The installer never displays the complete settings file or its backup.
   were checked against official documentation on 7 October 2026.
 - Claude supports [home-relative imports](https://code.claude.com/docs/en/memory#import-additional-files).
   Codex documents [global and project instruction discovery](https://developers.openai.com/codex/guides/agents-md).
-  A global `AGENTS.override.md` hides Codex's master, and a custom `CODEX_HOME`
+  A global `AGENTS.override.md` hides Codex's shared rules file, and a custom `CODEX_HOME`
   changes its location. The installer checks these before making changes.
 
 ## Changes in v5.1
@@ -195,4 +211,4 @@ The installer never displays the complete settings file or its backup.
 - Additional credential-file patterns and an optional bypass-disable question.
 - Codex permission guidance, clearer security limits, and explicit testing scope.
 - Clean v4/v5 history retains the original file snapshots with new commit and
-  tag attribution. v5's shared-master layout is unchanged.
+  tag attribution. v5's shared-file layout is unchanged.
