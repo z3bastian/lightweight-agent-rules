@@ -94,6 +94,21 @@ To update, open the newer package and type:
 **"Update my setup from this package."** Your personal rules are kept unless
 you explicitly approve replacing them.
 
+## Choosing your projects folder
+
+During installation, choose the folder where you keep your projects, such as
+`~/DEV` or `~/Documents/Projects`. You can use another accessible local folder,
+including one outside your home folder. Choose a dedicated projects folder,
+separate from the agents' configuration and private backups, rather than your
+entire home folder. If your projects are in several places, choose the one you
+use most often; you do not need to move the others.
+
+The installer records this location in your shared rules for context and command
+examples, and checks it for files left by older versions of this setup. Choosing
+it does not move projects, grant the agent access, or limit the shared rules to
+that folder. It also does not change where the agents' configuration files or
+private backups live. The installer explains this before asking for your choice.
+
 ## How it is wired
 
 | File | Purpose |
@@ -104,16 +119,22 @@ you explicitly approve replacing them.
 | A project's `AGENTS.md` / `CLAUDE.md` | Instructions specific to that project. The installer leaves them alone. |
 
 The two tools are peers: neither controls the other. `.codex` and `.claude`
-are separate hidden folders inside your home folder (`~`):
+are separate hidden folders inside your home folder (`~`). This macOS example
+uses `<username>` for your account name:
 
 ```text
-~/
+/Users/<username>/
 ├── .codex/
 │   └── AGENTS.md       (shared rules; Codex reads directly)
 └── .claude/
     ├── CLAUDE.md       (imports @~/.codex/AGENTS.md)
     └── settings.json  (Claude permissions)
 ```
+
+Your actual home folder can differ; Linux commonly uses `/home/<username>/`.
+The `~` paths elsewhere in this guide refer to your own home folder on either
+system. These global locations are fixed by this package's layout, independently
+of the projects folder you choose.
 
 Claude only: the shared rules go directly into `~/.claude/CLAUDE.md`, followed
 by the Claude-only rules; no `~/.codex` folder is created. Codex only: install
