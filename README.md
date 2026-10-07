@@ -1,8 +1,8 @@
 # Lightweight Agent Rules
 
-A small setup for Claude Code and Codex that makes your working preferences
-available across projects. If large agent-rules repositories feel too
-complicated, this package gives you a readable starting point.
+A small setup for local Claude Code and Codex agents that makes your working
+preferences available across projects. If large agent-rules repositories feel
+too complicated, this package gives you a readable starting point.
 
 The rules tell the agent to verify work before calling it finished, protect
 secrets and uncommitted work, ask before costly or live-system actions, follow
@@ -13,16 +13,44 @@ with no background service or complicated framework. You can inspect, edit,
 back up, or remove the setup yourself. Installation is guided by your AI
 following [`INSTALL.md`](INSTALL.md); it is not an unattended program.
 
-**Version 5.1.** Built and tested in VS Code on macOS. Other editors that run
-Claude Code or Codex are untested. The installer covers macOS and Linux;
-Linux has not received the same live installation testing. Windows is not
-supported by this package.
+**Version 5.1.** Built and tested in VS Code on macOS. Official documentation
+also establishes shared configuration in the interfaces listed below; those
+have not received equivalent live testing. The installer covers macOS and
+Linux; Linux has not received the same live installation testing. Windows
+is not supported by this package.
 
 ## Who it is for
 
 - Beginners who want each proposed change explained before it happens.
 - Experienced users who want a small rule system they can customize.
 - People who use Claude Code, Codex, or both across several projects.
+
+## Editors and desktop apps
+
+This package configures the agents, not the editor's own AI assistant.
+For local sessions using the same user account and standard configuration
+folders, one installation can serve several interfaces. Shared configuration
+does not mean identical tools, approval screens, or permission enforcement.
+
+| Interface | Compatibility evidence |
+| --- | --- |
+| Claude Code and Codex extensions in VS Code | **Personally tested on macOS.** This is the guided installation workflow below. |
+| Claude Code CLI, Cursor extension, and official JetBrains plugin | **Documented compatibility.** Claude's local interfaces use the same settings; the JetBrains plugin runs the CLI. See [shared settings](https://code.claude.com/docs/en/settings), [Cursor support](https://code.claude.com/docs/en/vs-code), and [JetBrains integration](https://code.claude.com/docs/en/jetbrains). |
+| Claude Desktop → Code → Local | **Documented compatibility.** Shares CLI instruction files and permissions. See [shared configuration](https://code.claude.com/docs/en/desktop#shared-configuration). |
+| Codex CLI and official extension in Cursor or Windsurf | **Documented compatibility.** The extension and CLI share configuration, including Codex's instruction discovery. See [supported editors](https://learn.chatgpt.com/docs/codex/ide), [shared configuration](https://learn.chatgpt.com/docs/developer-settings), and [AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md). |
+| Codex desktop / Codex in ChatGPT desktop, local sessions | **Documented compatibility.** Personal instructions use `AGENTS.md`. See [desktop personalization](https://learn.chatgpt.com/docs/reference/settings#personalization) and [global instruction discovery](https://learn.chatgpt.com/docs/agent-configuration/agents-md). |
+| Xcode's integrated agents | **Requires additional configuration.** Xcode uses [separate agent configuration folders](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents) that this installer does not target. |
+| JetBrains' embedded Codex integration | **Not yet confirmed for this package's global layout.** This is a separate integration from the extension and CLI above. |
+
+The documentation was checked on 7 October 2026. These are configuration
+compatibility claims, not claims that we tested every interface or that every
+interface runs on each operating system supported by the installer.
+
+Ordinary Claude and ChatGPT chats, Claude Cowork, and other assistants are
+outside this package's intended scope. ChatGPT Work has not been separately
+verified. Cloud or remote sessions, containers, WSL, and custom configuration
+homes do not automatically inherit files installed on your Mac. Check the
+agent's actual environment and loaded instructions before relying on them.
 
 ## What this gives you
 
@@ -42,6 +70,10 @@ Claude Code for the operations they match. Neither guarantees that every
 dangerous operation or every way of accessing a file is covered.
 
 ## Easy installation
+
+The steps below use the tested VS Code workflow. After installation, other
+documented local interfaces can reuse the same files; start a new session
+and verify instruction loading in the interface you use.
 
 1. On GitHub, select **Code → Download ZIP**.
 2. Unzip the downloaded folder.
@@ -134,8 +166,9 @@ The installer never displays the complete settings file or its backup.
 - **Money and live-system rules depend on the agent following instructions.**
   These file and command patterns do not enforce every action available through
   connected tools. The package installs no spending controls or enforcement hooks.
-- **Other products are outside scope.** This package does not configure Claude
-  Cowork or other coding assistants.
+- **Each interface has its own controls.** Browser access, computer control,
+  and connected tools can have separate permissions. Sharing the instruction
+  files does not make these selected file and command rules cover every action.
 
 ## Checked, not assumed
 

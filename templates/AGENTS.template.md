@@ -10,10 +10,11 @@
 
 # Instructions for {{NAME}}
 
-Every AI coding tool I use reads this file, in every folder. "How to respond"
-applies everywhere. The other sections apply whenever you work on code or a
-project, wherever that is; my projects live in `{{PROJECTS_FOLDER}}`. A project's own instruction file adds to these rules
-for that project.
+These instructions apply to Claude Code and Codex sessions configured to load
+this file. "How to respond" applies throughout those sessions. The other
+sections apply whenever you work on code or a project, wherever that is; my
+projects live in `{{PROJECTS_FOLDER}}`. A project's own instruction file adds
+to these rules for that project.
 
 ## How to respond
 

@@ -3,6 +3,11 @@
 You are Claude Code or Codex, and a person has asked you to install or update
 this setup. Follow these steps in order. A human can follow them too.
 
+This installs the local agents' standard home-directory files. The guided
+workflow below was tested in VS Code on macOS; README distinguishes that
+testing from documented compatibility in other local interfaces. Do not
+assume a cloud, remote, container, or custom-home session reads these files.
+
 Rules while you work:
 
 - Change nothing before the person approves the plan in step 3.
