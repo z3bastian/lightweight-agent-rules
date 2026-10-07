@@ -1,8 +1,8 @@
 # Lightweight Agent Rules
 
-A small setup for Claude Code and Codex that makes your working preferences
-available across projects. If large agent-rules repositories feel too
-complicated, this package gives you a readable starting point.
+A small setup for local Claude Code and Codex agents that makes your working
+preferences available across projects. If large agent-rules repositories feel
+too complicated, this package gives you a readable starting point.
 
 The rules tell the agent to verify work before calling it finished, protect
 secrets and uncommitted work, ask before costly or live-system actions, follow
@@ -13,16 +13,44 @@ with no background service or complicated framework. You can inspect, edit,
 back up, or remove the setup yourself. Installation is guided by your AI
 following [`INSTALL.md`](INSTALL.md); it is not an unattended program.
 
-**Version 5.1.** Built and tested in VS Code on macOS. Other editors that run
-Claude Code or Codex are untested. The installer covers macOS and Linux;
-Linux has not received the same live installation testing. Windows is not
-supported by this package.
+**Version 5.1.** Built and tested in VS Code on macOS. Official documentation
+also establishes shared configuration in the interfaces listed below; those
+have not received equivalent live testing. The installer covers macOS and
+Linux; Linux has not received the same live installation testing. Windows
+is not supported by this package.
 
 ## Who it is for
 
 - Beginners who want each proposed change explained before it happens.
 - Experienced users who want a small rule system they can customize.
 - People who use Claude Code, Codex, or both across several projects.
+
+## Editors and desktop apps
+
+This package configures the agents, not the editor's own AI assistant.
+For local sessions using the same user account and standard configuration
+folders, one installation can serve several interfaces. Shared configuration
+does not mean identical tools, approval screens, or permission enforcement.
+
+| Interface | Compatibility evidence |
+| --- | --- |
+| Claude Code and Codex extensions in VS Code | **Personally tested on macOS.** This is the guided installation workflow below. |
+| Claude Code CLI, Cursor extension, and official JetBrains plugin | **Documented compatibility.** Claude's local interfaces use the same settings; the JetBrains plugin runs the CLI. See [shared settings](https://code.claude.com/docs/en/settings), [Cursor support](https://code.claude.com/docs/en/vs-code), and [JetBrains integration](https://code.claude.com/docs/en/jetbrains). |
+| Claude Desktop → Code → Local | **Documented compatibility.** Shares CLI instruction files and permissions. See [shared configuration](https://code.claude.com/docs/en/desktop#shared-configuration). |
+| Codex CLI and official extension in Cursor or Windsurf | **Documented compatibility.** The extension and CLI share configuration, including Codex's instruction discovery. See [supported editors](https://learn.chatgpt.com/docs/codex/ide), [shared configuration](https://learn.chatgpt.com/docs/developer-settings), and [AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md). |
+| Codex desktop / Codex in ChatGPT desktop, local sessions | **Documented compatibility.** Personal instructions use `AGENTS.md`. See [desktop personalization](https://learn.chatgpt.com/docs/reference/settings#personalization) and [global instruction discovery](https://learn.chatgpt.com/docs/agent-configuration/agents-md). |
+| Xcode's integrated agents | **Requires additional configuration.** Xcode uses [separate agent configuration folders](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents) that this installer does not target. |
+| JetBrains' embedded Codex integration | **Not yet confirmed for this package's global layout.** This is a separate integration from the extension and CLI above. |
+
+The documentation was checked on 7 October 2026. These are configuration
+compatibility claims, not claims that we tested every interface or that every
+interface runs on each operating system supported by the installer.
+
+Ordinary Claude and ChatGPT chats, Claude Cowork, and other assistants are
+outside this package's intended scope. ChatGPT Work has not been separately
+verified. Cloud or remote sessions, containers, WSL, and custom configuration
+homes do not automatically inherit files installed on your Mac. Check the
+agent's actual environment and loaded instructions before relying on them.
 
 ## What this gives you
 
@@ -43,6 +71,10 @@ dangerous operation or every way of accessing a file is covered.
 
 ## Easy installation
 
+The steps below use the tested VS Code workflow. After installation, other
+documented local interfaces can reuse the same files; start a new session
+and verify instruction loading in the interface you use.
+
 1. On GitHub, select **Code → Download ZIP**.
 2. Unzip the downloaded folder.
 3. Open that folder in VS Code.
@@ -62,33 +94,70 @@ To update, open the newer package and type:
 **"Update my setup from this package."** Your personal rules are kept unless
 you explicitly approve replacing them.
 
+## Choosing your projects folder
+
+During installation, choose the folder where you keep your projects, such as
+`~/DEV` or `~/Documents/Projects`. You can use another accessible local folder,
+including one outside your home folder. Choose a dedicated projects folder,
+separate from the agents' configuration and private backups, rather than your
+entire home folder. If your projects are in several places, choose the one you
+use most often; you do not need to move the others.
+
+The installer records this location in your shared rules for context and command
+examples, and checks it for files left by older versions of this setup. Choosing
+it does not move projects, grant the agent access, or limit the shared rules to
+that folder. It also does not change where the agents' configuration files or
+private backups live. The installer explains this before asking for your choice.
+
 ## How it is wired
 
 | File | Purpose |
 | --- | --- |
-| `~/.codex/AGENTS.md` | The master shared rules. Codex reads its own global instructions file directly. |
-| `~/.claude/CLAUDE.md` | Imports the master with `@~/.codex/AGENTS.md`, then adds a few Claude-only rules. |
+| `~/.codex/AGENTS.md` | The shared rules file. Codex reads its own global instructions file directly. |
+| `~/.claude/CLAUDE.md` | Imports the shared rules with `@~/.codex/AGENTS.md`, then adds a few Claude-only rules. |
 | `~/.claude/settings.json` | Claude's permission rules, merged into your existing settings. |
 | A project's `AGENTS.md` / `CLAUDE.md` | Instructions specific to that project. The installer leaves them alone. |
 
+The two tools are peers: neither controls the other. `.codex` and `.claude`
+are separate hidden folders inside your home folder (`~`). This macOS example
+uses `<username>` for your account name:
+
 ```text
-~/.codex/AGENTS.md  (the master)
-   ├── Codex reads it directly
-   └── Claude imports it from ~/.claude/CLAUDE.md
+/Users/<username>/
+├── .codex/
+│   └── AGENTS.md       (shared rules; Codex reads directly)
+└── .claude/
+    ├── CLAUDE.md       (imports @~/.codex/AGENTS.md)
+    └── settings.json  (Claude permissions)
 ```
+
+Your actual home folder can differ; Linux commonly uses `/home/<username>/`.
+The `~` paths elsewhere in this guide refer to your own home folder on either
+system. These global locations are fixed by this package's layout, independently
+of the projects folder you choose.
 
 Claude only: the shared rules go directly into `~/.claude/CLAUDE.md`, followed
 by the Claude-only rules; no `~/.codex` folder is created. Codex only: install
 just `~/.codex/AGENTS.md`, with no Claude files or Claude permission rules.
 
-The combined layout uses Codex's documented global file and Claude's
-import syntax. It needs no symlink and puts no master rules file in your
-projects folder. The master is in a hidden folder: ask your AI to open it in
-VS Code. After editing it, start a new chat and verify it loads.
+The shared file lives in `.codex` because that is Codex's documented global
+location, and Claude's supported import lets both read one editable file.
+It needs no symlink and puts no shared rules file in your projects folder.
+Ask your AI to open the hidden file in VS Code. After editing it, start a
+new chat and verify it loads.
 
 For notes shared by both tools inside a project, keep them in `AGENTS.md`
-and put `@AGENTS.md` in a neighbouring `CLAUDE.md`. This avoids relying on
-version-dependent automatic discovery of `AGENTS.md` by Claude.
+and put `@AGENTS.md` in a neighbouring `CLAUDE.md`. This remains a supported
+option across versions and does not make Claude load the file twice.
+
+Claude Code v2.1.277 and later can also read project `AGENTS.md` files directly
+through its built-in plugin. By default it prefers `CLAUDE.md`: direct
+`AGENTS.md` loading applies when no `CLAUDE.md`, `.claude/CLAUDE.md`, or
+`CLAUDE.local.md` exists in the working directory or its ancestors. Your
+global `~/.claude/CLAUDE.md` does not suppress that fallback. A setting can
+instead load both kinds of project file. This project discovery does not
+automatically read Codex's global `~/.codex/AGENTS.md`, so the combined setup
+keeps its global import. See [Claude's AGENTS.md support and import guidance](https://code.claude.com/docs/en/memory#agentsmd).
 
 ## Backups and undo
 
@@ -134,8 +203,9 @@ The installer never displays the complete settings file or its backup.
 - **Money and live-system rules depend on the agent following instructions.**
   These file and command patterns do not enforce every action available through
   connected tools. The package installs no spending controls or enforcement hooks.
-- **Other products are outside scope.** This package does not configure Claude
-  Cowork or other coding assistants.
+- **Each interface has its own controls.** Browser access, computer control,
+  and connected tools can have separate permissions. Sharing the instruction
+  files does not make these selected file and command rules cover every action.
 
 ## Checked, not assumed
 
@@ -150,7 +220,7 @@ The installer never displays the complete settings file or its backup.
   were checked against official documentation on 7 October 2026.
 - Claude supports [home-relative imports](https://code.claude.com/docs/en/memory#import-additional-files).
   Codex documents [global and project instruction discovery](https://developers.openai.com/codex/guides/agents-md).
-  A global `AGENTS.override.md` hides Codex's master, and a custom `CODEX_HOME`
+  A global `AGENTS.override.md` hides Codex's shared rules file, and a custom `CODEX_HOME`
   changes its location. The installer checks these before making changes.
 
 ## Changes in v5.1
@@ -162,4 +232,4 @@ The installer never displays the complete settings file or its backup.
 - Additional credential-file patterns and an optional bypass-disable question.
 - Codex permission guidance, clearer security limits, and explicit testing scope.
 - Clean v4/v5 history retains the original file snapshots with new commit and
-  tag attribution. v5's shared-master layout is unchanged.
+  tag attribution. v5's shared-file layout is unchanged.

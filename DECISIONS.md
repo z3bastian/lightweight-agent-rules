@@ -12,3 +12,4 @@
 - 2026-10-07 — State macOS/VS Code testing and remove untested editor compatibility claims and topics; reject implying Linux, other editors, or Windows received equivalent live testing.
 - 2026-10-07 — Use one focused defect review after local scenario checks; reject repeated design-review rounds because actual failures and their fixes are the remaining review scope.
 - 2026-10-07 — Approve consequential GitHub actions in explicit listed stages, with separate decisions for deletion and public visibility; reject treating a general implementation request as permission for those later actions.
+- 2026-10-07 — Refine the earlier editor-compatibility decision to distinguish personally tested macOS/VS Code from compatibility established by official documentation, and limit GitHub About to those categories; reject blanket all-editor or desktop claims because shared configuration and live testing are different evidence.

@@ -3,6 +3,11 @@
 You are Claude Code or Codex, and a person has asked you to install or update
 this setup. Follow these steps in order. A human can follow them too.
 
+This installs the local agents' standard home-directory files. The guided
+workflow below was tested in VS Code on macOS; README distinguishes that
+testing from documented compatibility in other local interfaces. Do not
+assume a cloud, remote, container, or custom-home session reads these files.
+
 Rules while you work:
 
 - Change nothing before the person approves the plan in step 3.
@@ -34,7 +39,7 @@ Find out, without asking:
 ## Step 2 — Ask (one message, numbered, all at once)
 
 1. What name should the rules file use for you?
-2. What is the absolute path of your projects folder? (The folder that holds your project folders.)
+2. Explain before asking: the **projects folder** is the folder where they normally keep their separate projects, such as `~/DEV` or `~/Documents/Projects`. They may choose another accessible local folder, including one outside their home folder; use a dedicated projects folder, separate from the agents' configuration and backups, not their entire home folder. If they use several projects folders, choose the one used most often. This location is written into their rules for context and command examples, and checked for old setup files. Choosing it does not move projects, grant access, restrict the shared rules to that folder, or relocate the global configuration and private backups. Then ask: which folder should the setup use? Help them identify it if needed; they do not need to know its full path already.
 3. Do you use Claude Code, Codex, or both? This decides the layout: **both** — the master is `~/.codex/AGENTS.md` and Claude imports it; **Claude only** — the master's content goes straight into `~/.claude/CLAUDE.md` and no `~/.codex` folder is created; **Codex only** — just `~/.codex/AGENTS.md`, and all Claude steps are skipped.
 4. The "How to respond" section in `templates/AGENTS.template.md` is one person's reply style. Keep it, keep it but drop "I am not a developer", write your own, or remove the section? Show them the section.
 5. Do you work alone, or in a team with its own branch and review rules? (In a team, the team's rules win; offer to drop the Git section.)
@@ -43,6 +48,17 @@ Find out, without asking:
 8. Only if step 1 found existing instruction files (`~/.claude/CLAUDE.md`, a real `~/.codex/AGENTS.md`, or a `CLAUDE.md`/`AGENTS.md`/`AI-RULES.md` directly in the projects folder): show their rules that are not already in the template, and ask which to keep in the master. Include `@` import lines and anything that isn't a plain rule — those are easy to lose. Kept rules go into the matching section of the master; anything without a matching section goes under a final `## Personal additions` heading. Rules they don't keep are dropped (the backup still has them).
 9. Only if `~/.claude/settings.json` has `"skipDangerousModePermissionPrompt": true`: explain that it skips Claude's confirmation before bypass-permissions mode (the mode where Claude acts without asking). Recommend removing it so that warning comes back. Remove it or keep it?
 10. For Claude users, unless bypass mode is already disabled: disable bypass-permissions mode? Recommend yes for ordinary local work, and explain that `permissions.disableBypassPermissionsMode = "disable"` prevents entering it, including with `--dangerously-skip-permissions`. This is stronger than restoring its warning. It does not disable auto mode. If they decline, leave the setting unchanged. If already disabled, report that and preserve it. Check effective rules in `/permissions` when managed settings may apply; never try to override them.
+
+Resolve their projects-folder answer to an absolute path and show it in the
+plan. Check that it is an accessible directory; do not guess another location
+if it is missing or points to a file. Keep it separate from `~/.codex`,
+`~/.claude`, and `~/.lightweight-agent-rules`: after resolving symlinks for this
+check, it must neither contain those folders nor be inside them. Explain that
+they need a dedicated projects folder, not their entire home folder. If they
+want a new folder, include its creation explicitly in the plan and wait for
+approval. Do not move existing projects. Complete the projects-folder checks
+from step 1 once the location is known, and include any resulting question 8
+choices before approval.
 
 ## Step 3 — Show the plan and wait for "yes"
 
@@ -56,7 +72,7 @@ Skip the parts that don't apply to the answer to question 3.
 
 **a. The master file** — `~/.codex/AGENTS.md` (both, or Codex only)
 
-Copy `templates/AGENTS.template.md`, replace `{{NAME}}`, `{{PROJECTS_FOLDER}}`, and `{{EXAMPLE_PROJECT}}` (a real folder name from their projects folder), and apply the answers from step 2. Write it as a real file; create `~/.codex` if needed.
+Copy `templates/AGENTS.template.md`, replace `{{NAME}}`, `{{PROJECTS_FOLDER}}`, and `{{EXAMPLE_PROJECT}}` (a real folder name from their projects folder), and apply the answers from step 2. If no project exists there yet, omit the illustrative `Write …, never …` sentence instead of inventing a runnable command; keep the rule requiring complete commands. Write it as a real file; create `~/.codex` if needed.
 
 - If `~/.codex/AGENTS.md` exists as a real file: back it up, then replace it. Its rules were handled by question 8.
 - If it is a symlink: record its old target in `CHANGES.txt`, remove the link (this never touches the file it points to), and write the master as a real file in its place.
